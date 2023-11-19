@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=TVA Shield Monochromatic
+Description=TVA shield from Loki series in monochromatic version.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/TVA-shield-mono
+ScriptFile=/usr/share/plymouth/themes/TVA-shield-mono/TVA-shield-mono.script
+UseFirmwareBackground=false
