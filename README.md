@@ -1,5 +1,5 @@
-# TVA shield plymouth theme
-Plymouth theme with TVA shield from Loki series. </br>
+# TVA Emblem plymouth theme
+Plymouth theme with TVA Emblem from Loki series. </br>
 Available in colored and monochromatic version.</br>
 This work is based in ![vortex-ubuntu](https://github.com/emanuele-scarsella/vortex-ubuntu-plymouth-theme/) source code. </br>
 
