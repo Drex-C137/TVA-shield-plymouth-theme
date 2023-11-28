@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YLLW='\033[1;33m'
+NC='\033[0m'
+# Check if runing as root user
+if [ "$EUID" -ne 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nThis script needs to run as ${YLLW}root user${NC}, please use \"${GREEN}sudo ./installer${NC}\" instead";
+	exit 1;
+fi
+
+
+
+# Check if plymouth themes directory exist
+if [ ! -d "/usr/share/plymouth/themes" ]; then
+	echo -e "[${RED}ERROR${NC}]\"/usr/share/plymouth/themes\" directory dose not exist, are you sure plymouth is installed and updated?";
+	exit 1;
+fi
+
+
+
+# Coping TVA-Seal in /usr/share/plymouth/themes/
+echo -n "Coping theme in /usr/share/plymouth/themes/           >>>    " ;
+cp -r `dirname $0`/TVA-Seal /usr/share/plymouth/themes/ ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nError occoured  moving `dirname $0`/TVA-Seal to /usr/share/plymouth/themes/" ;
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+
+
+# Adding TVA-Seal in the list of aviable themes
+echo -n "Updating plymouth themes alternatives                 >>>    " ;
+update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/TVA-Seal/TVA-Seal.plymouth 100  &> /dev/null ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nError occoured installing alternative in /usr/share/plymouth/themes/default.plymouth" ;
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+
+
+# Setting TVA-Seal as default plymouth theme;
+echo -n "Setting TVA-Seal as default plymouth theme            >>>    " ;
+update-alternatives --set default.plymouth /usr/share/plymouth/themes/TVA-Seal/TVA-Seal.plymouth  &> /dev/null ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nError occoured setting alternative in /usr/share/plymouth/themes/default.plymouth";
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+
+
+# Updating Initial RAM File System
+echo -n "Updating Initial RAM File System                      >>>    " ;
+update-initramfs -u &> /dev/null ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nError occoured executing \"update-initramfs -u\"";
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+echo "Plymouth theme updated successfully" ;
+
+exit 0;

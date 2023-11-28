@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YLLW='\033[1;33m'
+NC='\033[0m'
+# Comprobando permisos de administrador
+if [ "$EUID" -ne 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nEste script necesita ejecutarse como ${YLLW}administrador${NC}, por favor utilice \"${GREEN}sudo ./instalador${NC}\" para ejecutar el archivo.";
+	exit 1;
+fi
+
+
+
+# Comprobando si exite la carpeta plymouth/themes
+if [ ! -d "/usr/share/plymouth/themes" ]; then
+	echo -e "[${RED}ERROR${NC}]\"/usr/share/plymouth/themes\" No se encuentra la carpeta, parece que Plymouth no está instalado o actualizado.";
+	exit 1;
+fi
+
+
+
+# Copiando Emblema-AVT en /usr/share/plymouth/themes/
+echo -n "Copiando tema en /usr/share/plymouth/themes/          >>>    " ;
+cp -r `dirname $0`/Emblema-AVT /usr/share/plymouth/themes/ ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nHubo un fallo al copiar `dirname $0`/Emblema-AVT a /usr/share/plymouth/themes/" ;
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+
+
+# Añadiendo Emblema-AVT a la lista de temasa
+echo -n "Actualizando opciones de temas Plymouth               >>>    " ;
+update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/Emblema-AVT/Emblema-AVT.plymouth 100  &> /dev/null ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nHubo un fallo al añadir el tema en el archivo /usr/share/plymouth/themes/default.plymouth" ;
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+
+
+# Instalando Emblema-AVT como tema predeterminado
+echo -n "Estableciendo Emblema-AVT como tema por defecto       >>>    " ;
+update-alternatives --set default.plymouth /usr/share/plymouth/themes/Emblema-AVT/Emblema-AVT.plymouth  &> /dev/null ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nHubo un fallo al establecer la alternativa en /usr/share/plymouth/themes/default.plymouth";
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+
+
+# Actualizando sistema de archivos inicial de RAM
+echo -n "Actualizando sistema de archivos inicial de RAM       >>>    " ;
+update-initramfs -u &> /dev/null ;
+if [ $? -gt 0 ]; then
+	echo -e "[${RED}ERROR${NC}]\nHubo un fallo al ejecutar \"update-initramfs -u\"";
+	exit 1;
+fi
+echo -e "[${GREEN}OK${NC}]" ;
+
+echo "Tema de Plymouth actualizado con éxito" ;
+
+exit 0;

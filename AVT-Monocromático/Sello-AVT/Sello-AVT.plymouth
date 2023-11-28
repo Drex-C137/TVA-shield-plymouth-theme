@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=Sello AVT
+Description=Emblema de la AVT de la serie Loki en versión monocromática.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/Sello-AVT
+ScriptFile=/usr/share/plymouth/themes/Sello-AVT/Sello-AVT.script
+UseFirmwareBackground=false

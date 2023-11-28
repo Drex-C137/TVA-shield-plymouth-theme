@@ -1,0 +1,40 @@
+# Fondo
+
+Window.SetBackgroundTopColor (0, 0, 0);           
+Window.SetBackgroundBottomColor (0, 0, 0);      
+fondo_img = Image ("fondo.png");
+fondo_img = fondo_img.Scale (Window.GetWidth (),Window.GetHeight ());
+fondo =  Sprite (fondo_img);
+fondo.SetZ (-1);
+
+	# Emblema-AVT
+
+avtSize = 260;
+avt_image = Image ("Emblema-AVT.png");
+avt_image = avt_image.Scale (avtSize , avtSize);
+    avt = Sprite (avt_image);
+	avt.SetX (Window.GetWidth ()  / 2 - avt_image.GetWidth()  / 2);
+
+	# Modo Apagado
+
+if (Plymouth.GetMode () == "shutdown") {
+	avt.SetY ((Window.GetHeight() / 2) - avt_image.GetHeight() / 2);
+}
+else {
+	avt.SetY ((Window.GetHeight() * 2 / 5) - avt_image.GetHeight() / 2);
+}
+
+# Barra de Carga
+
+if (Plymouth.GetMode () == "boot") {
+    barpix = Image ("barpix.png");
+    pixbar = barpix.Scale (1, 3);
+    pixbar = Sprite (barpix);
+    pixbar.SetX (Window.GetWidth () / 3);
+    pixbar.SetY (Window.GetHeight() * (5/6));
+
+    fun barraCarga (duration, progress) {
+         pixbar.SetImage (barpix.Scale ( progress * Window.GetWidth () / 3, 3));
+    }
+    Plymouth.SetBootProgressFunction (barraCarga);
+}

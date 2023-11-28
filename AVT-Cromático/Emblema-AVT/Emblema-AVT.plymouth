@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=Emblema AVT
+Description=Emblema de la AVT de la serie Loki.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/Emblema-AVT
+ScriptFile=/usr/share/plymouth/themes/Emblema-AVT/Emblema-AVT.script
+UseFirmwareBackground=false

@@ -1,0 +1,42 @@
+# Background
+
+Window.SetBackgroundTopColor (0, 0, 0);           
+Window.SetBackgroundBottomColor (0, 0, 0);      
+back_image = Image ("background.png");
+back_image = back_image.Scale (Window.GetWidth (),Window.GetHeight ());
+back =  Sprite (back_image);
+back.SetZ (-1);
+
+# Shutdown mode
+
+	# TVA-shield
+
+tvaSize = 260;
+tva_image = Image ("TVA-shield.png");
+tva_image = tva_image.Scale (tvaSize , tvaSize);
+    tva = Sprite (tva_image);
+	tva.SetX (Window.GetWidth ()  / 2 - tva_image.GetWidth()  / 2);
+
+	#Shutdouwn Mode
+
+if (Plymouth.GetMode () == "shutdown") {
+	tva.SetY ((Window.GetHeight() / 2) - tva_image.GetHeight() / 2);
+}
+else {
+	tva.SetY ((Window.GetHeight() * 2 / 5) - tva_image.GetHeight() / 2);
+}
+
+# Loading Bar
+
+if (Plymouth.GetMode () == "boot") {
+    barpix = Image ("barpix.png");
+    pixbar = barpix.Scale (1, 3);
+    pixbar = Sprite (barpix);
+    pixbar.SetX (Window.GetWidth ()  / 3);
+    pixbar.SetY (Window.GetHeight() * (5/6));
+
+    fun loadBar (duration, progress) {
+         pixbar.SetImage(barpix.Scale ( progress * Window.GetWidth () / 3, 3));
+    }
+    Plymouth.SetBootProgressFunction(loadBar);
+}
